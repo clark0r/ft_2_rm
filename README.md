@@ -21,9 +21,11 @@ macos
 
 ```$ brew install homebrew/cask/wkhtmltopdf```
 
+3. chrome
 
+yes, it uses chrome headless to produce the pdf documents, you could use chromium if you are a free software fan :)
 
-## rmapi
+4. rmapi
 > rMAPI is a Go app that allows you to access the ReMarkable Cloud API programmatically.
 https://github.com/juruen/rmapi/blob/master/README.md
 
