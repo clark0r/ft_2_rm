@@ -1,11 +1,14 @@
 #!/opt/homebrew/bin/python3
 import subprocess, os, sys, pdfkit, urllib, datetime
+import time
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 
 chrome_exe='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 output_dir='out'
 ft_url='https://www.ft.com/technology'
+
+script_path=os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def getNewsDict():
     newsDict = {}
@@ -25,25 +28,27 @@ def getNewsDict():
     return newsDict
 
 def printToPDF(dict):
-    dict = getNewsDict()
+    if not os.path.exists(script_path + '/' + output_dir):
+        os.makedirs(script_path + '/' + output_dir)
+
     for key in dict.keys():
         val = dict[key]
         # print("Title: ",val)
         # print("URL  : ",key)
         # print("")
         
-        cmd = chrome_exe + " --headless --disable-gpu --print-to-pdf='" + output_dir + "/" + val + ".pdf' '" + key + "'"
+        cmd = chrome_exe + " --headless --disable-gpu --print-to-pdf='" + script_path + '/' + output_dir + "/" + val + ".pdf' '" + key + "'"
         returned_value = subprocess.call(cmd, shell=True)
 
 def syncToRM():
     current_date = datetime.date.today().strftime("%d-%m-%Y")
-    folder = 'news_' + current_date
-    subprocess.Popen(['rmapi','mkdir',folder])
+    rm2_folder = 'news_' + current_date
+    subprocess.Popen(['rmapi','mkdir',rm2_folder])
+    time.sleep(3)
 
-    script_path=os.path.dirname(os.path.realpath(sys.argv[0]))
     os.chdir(script_path + '/' + output_dir)
-    subprocess.Popen(['rmapi','mput',folder])
+    subprocess.Popen(['rmapi','mput',rm2_folder])
 
 newsDict=getNewsDict()
 printToPDF(newsDict)
-syncToRM
+syncToRM()
