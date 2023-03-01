@@ -49,6 +49,21 @@ def syncToRM():
     os.chdir(script_path + '/' + output_dir)
     subprocess.Popen(['rmapi','mput',rm2_folder])
 
+# todo
+def removeOldNews():
+    # get list of news folders
+    # rmapi ls | grep news | awk {'print $2'}
+
+    # get todays date and folder, to exclude from deletion
+    current_date = datetime.date.today().strftime("%d-%m-%Y")
+    rm2_folder = 'news_' + current_date
+
+    # interate list of folders
+        # get list of files in folder
+        # call delete on file
+        # call delete on folder
+
+
 newsDict=getNewsDict()
 printToPDF(newsDict)
 syncToRM()
