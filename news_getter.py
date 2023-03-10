@@ -44,7 +44,16 @@ def syncToRM():
     current_date = datetime.date.today().strftime("%d-%m-%Y")
     rm2_folder = 'news_' + current_date
     subprocess.Popen(['rmapi','mkdir',rm2_folder])
-    time.sleep(3)
+
+    # loop, waiting for the new folder to appear
+    while True:
+        time.sleep(3)
+        cmd = "rmapi ls | grep " + rm2_folder
+        returned_value = subprocess.call(cmd, shell=True)
+        # 1 = folder doesn't exist, sleep and try again
+        # 0 = folder does exist, move to upload
+        if returned_value==0:
+            break
 
     os.chdir(script_path + '/' + output_dir)
     subprocess.Popen(['rmapi','mput',rm2_folder])
